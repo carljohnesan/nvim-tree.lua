@@ -523,6 +523,7 @@ function M.setup(opts)
   M.View.preserve_window_proportions = options.preserve_window_proportions
   M.View.winopts.cursorline = options.cursorline
   M.View.winopts.number = options.number
+  M.View.winopts.foldcolumn = options.foldcolumn
   M.View.winopts.relativenumber = options.relativenumber
   M.View.winopts.signcolumn = options.signcolumn
   M.View.float = options.float
