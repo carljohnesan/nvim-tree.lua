@@ -163,7 +163,7 @@ end
 ---@param node table
 ---@return HighlightedString icon, HighlightedString name
 function Builder:_build_symlink(node)
-  local icon = icons.i.symlink
+  local icon = self:_build_symlink_icon(node)
   local arrow = icons.i.symlink_arrow
   local symlink_formatted = node.name
   if self.symlink_destination then
@@ -173,13 +173,22 @@ function Builder:_build_symlink(node)
 
   local link_highlight = "NvimTreeSymlink"
 
-  return { str = icon }, { str = symlink_formatted, hl = link_highlight }
+  return icon, { str = symlink_formatted, hl = link_highlight }
 end
 
 ---@param node table
 ---@return HighlightedString icon
 function Builder:_build_file_icon(node)
   local icon, hl_group = icons.get_file_icon(node.name, node.extension)
+  return { str = icon, hl = hl_group }
+end
+
+---@param node table
+---@return HighlightedString icon
+function Builder:_build_symlink_icon(node)
+  local name = utils.path_basename(node.link_to)
+  local extension = string.match(name, ".?[^.]+%.(.*)") or ""
+  local icon, hl_group = icons.get_file_icon(name, extension)
   return { str = icon, hl = hl_group }
 end
 
