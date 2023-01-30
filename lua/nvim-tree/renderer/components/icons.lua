@@ -31,9 +31,10 @@ local function get_folder_icon(open, is_symlink, has_children)
   return n
 end
 
-local function get_file_icon_default()
-  local hl_group = "NvimTreeFileIcon"
-  local icon = M.config.glyphs.default
+local function get_file_icon_default(_, _, node)
+  node = node or {}
+  local hl_group = node.executable and "NvimTreeExecFileIcon" or "NvimTreeFileIcon"
+  local icon = node.executable and M.config.glyphs.default_executable or M.config.glyphs.default
   if #icon > 0 then
     return icon, hl_group
   else
@@ -41,18 +42,19 @@ local function get_file_icon_default()
   end
 end
 
-local function get_file_icon_webdev(fname, extension)
+local function get_file_icon_webdev(fname, extension, node)
+  node = node or {}
   local icon, hl_group = M.devicons.get_icon(fname, extension)
   if not M.config.webdev_colors then
-    hl_group = "NvimTreeFileIcon"
+    hl_group = node.executable and "NvimTreeExecFileIcon" or "NvimTreeFileIcon"
   end
   if icon and hl_group ~= "DevIconDefault" then
     return icon, hl_group
   elseif string.match(extension, "%.(.*)") then
     -- If there are more extensions to the file, try to grab the icon for them recursively
-    return get_file_icon_webdev(fname, string.match(extension, "%.(.*)"))
+    return get_file_icon_webdev(fname, string.match(extension, "%.(.*)"), node)
   else
-    return get_file_icon_default()
+    return get_file_icon_default(fname, extension, node)
   end
 end
 

@@ -179,7 +179,7 @@ end
 ---@param node table
 ---@return HighlightedString icon
 function Builder:_build_file_icon(node)
-  local icon, hl_group = icons.get_file_icon(node.name, node.extension)
+  local icon, hl_group = icons.get_file_icon(node.name, node.extension, node)
   return { str = icon, hl = hl_group }
 end
 

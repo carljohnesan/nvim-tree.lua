@@ -613,6 +613,7 @@ local DEFAULT_OPTS = { -- BEGIN_DEFAULT_OPTS
       },
       glyphs = {
         default = "",
+        default_executable = "",
         symlink = "",
         bookmark = "",
         modified = "●",
