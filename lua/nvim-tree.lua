@@ -698,7 +698,7 @@ local DEFAULT_OPTS = { -- BEGIN_DEFAULT_OPTS
     use_system_clipboard = true,
     change_dir = {
       enable = true,
-      global = false,
+      scope = 'local',
       restrict_above_cwd = false,
     },
     expand_all = {

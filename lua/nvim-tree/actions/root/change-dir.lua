@@ -46,8 +46,18 @@ function M.fn(input_cwd, with_open)
   M.force_dirchange(foldername, with_open)
 end
 
-local function cd(global, path)
-  vim.cmd((global and "cd " or "lcd ") .. vim.fn.fnameescape(path))
+local function cd(scope, path)
+  local cdcmd = scope == 'global' and 'cd'
+    or scope == 'local' and 'lcd'
+    or scope == 'tab' and 'tcd'
+
+  if not cdcmd then
+    local msg = string.format("[NvimTree] invalid option: actions.change_dir.scope expected: 'local' | 'tab' | 'global' but got '%s'", scope)
+    vim.notify(msg, vim.log.levels.WARN)
+    cdcmd = 'lcd'
+  end
+
+  vim.cmd{ cmd = cdcmd, args = {path} }
 end
 
 local function should_change_dir()
@@ -64,7 +74,7 @@ end
 
 M.force_dirchange = add_profiling_to(function(foldername, should_open_view)
   if should_change_dir() then
-    cd(M.options.global, foldername)
+    cd(M.options.scope, foldername)
   end
 
   core.init(foldername)
